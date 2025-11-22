@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>价值共创宝典 - Value Co-Creation Playbook</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Inter字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义样式 */
+        html {
+            scroll-behavior: smooth; /* 保留平滑滚动 */
+            scroll-snap-type: y mandatory; /* 【新功能】
+                在Y轴（垂直）上启用滚动捕捉
+                'mandatory' 意味着浏览器必须自动捕捉到下一个点
+            */
+        }
+        
+        /* 【新功能】
+           让所有主要区块（header, section, footer）成为滚动捕捉的对象
+           'start' 意味着区块的顶部会与视窗的顶部对齐
+        */
+        header, main > section {
+            scroll-snap-align: start;
+        }
+
+        body {
+            font-family: 'Inter', 'Helvetica Neue', 'Arial', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background-color: #0a0a0f; /* 更深的背景色 */
+            color: #f0f4f8;
+        }
+        
+        /* 英雄区域的动态渐变背景 */
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero-gradient-bg {
+            background: linear-gradient(-45deg, #0a0a0f, #0f172a, #0369a1, #0a0a0f);
+            background-size: 400% 400%;
+            animation: gradient-flow 20s ease infinite;
+        }
+
+        /* 标题的动态渐变文字 */
+        .gradient-text {
+            background: linear-gradient(90deg, #06b6d4, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        /* 滚动指示器动画 */
+        @keyframes bounce-slow {
+            0%, 100% {
+                transform: translateY(-20%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 2.5s infinite;
+        }
+
+        /* 分类卡片的发光描边 */
+        .category-card {
+            position: relative;
+            background-color: #111827; /* 卡片背景色 */
+            border: 1px solid #374151; /* 默认描边 */
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-8px);
+            border-color: #06b6d4; /* 悬停时青色描边 */
+            box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
+        }
+
+        /* 【新】模态框的滚动条样式 (适用于所有模态框) */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #b8b8b8;
+            border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* 【新】模态框内容统一样式 */
+        .modal-content p, .modal-content ul, .modal-content ol {
+            font-size: 1rem; /* 16px */
+            line-height: 1.75; /* 28px */
+            color: #374151; /* gray-700 */
+            margin-bottom: 1rem;
+        }
+        .modal-content h3 {
+            font-size: 1.25rem; /* 20px */
+            font-weight: 600; /* semibold */
+            color: #111827; /* gray-900 */
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .modal-content ul, .modal-content ol {
+            padding-left: 1.5rem; /* pl-6 */
+        }
+        .modal-content ul {
+            list-style-type: disc;
+        }
+        .modal-content ol {
+            list-style-type: decimal;
+        }
+        .modal-content a {
+            color: #06b6d4; /* cyan-500 */
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .modal-content a:hover {
+            color: #0891b2; /* cyan-600 */
+        }
+    </style>
+</head>
+<body class="w-full overflow-x-hidden">
+
+    <!-- 1. 首页 (Hero Section) -->
+    <!-- 
+        【滚动捕捉调整】
+        'h-screen' 已经是全屏高度，非常适合作为第一个捕捉点
+    -->
+    <header class="h-screen min-h-[700px] w-full flex flex-col justify-center items-center relative hero-gradient-bg p-8">
+        <!-- 导航栏 -->
+        <nav class="absolute top-0 left-0 w-full p-6 md:p-8 z-10">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold tracking-wider">
+                    VCP<span class="text-cyan-400">.</span>
+                </a>
+                <div class="hidden md:flex space-x-8 text-gray-300">
+                    <a href="#categories" class="hover:text-cyan-400 transition-colors">知识分类</a>
+                    <a href="#recommended" class="hover:text-cyan-400 transition-colors">推荐文章</a>
+                    <a href="#latest" class="hover:text-cyan-400 transition-colors">最新动态</a>
+                    <a href="#contact" class="hover:text-cyan-400 transition-colors">联系我们</a>
+                </div>
+                <a href="#contact" class="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-cyan-400 transition-all text-sm">
+                    立即订阅
+                </a>
+            </div>
+        </nav>
+
+        <!-- 英雄区域主内容 -->
+        <div class="text-center z-0">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6">
+                <span class="gradient-text">价值共创</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-300 max-w-3xl mx-auto">
+                探索、协作、创新的未来宝典。
+                <br class="hidden md:block">
+                重新定义企业与用户的协作边界。
+            </p>
+            <a href="#categories" class="mt-12 inline-block bg-white text-gray-900 px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform hover:scale-105">
+                开始探索
+            </a>
+        </div>
+
+        <!-- 向下滚动指示器 -->
+        <a href="#categories" class="absolute bottom-10 animate-bounce-slow text-cyan-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </a>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="w-full">
+
+        <!-- 
+            2. 知识分类
+            【滚动捕捉调整】
+            添加 'min-h-screen' 'flex' 'flex-col' 'justify-center'
+            确保这个版块至少有一屏高，并且内容垂直居中，以便能被正确捕捉
+        -->
+        <section id="categories" class="min-h-screen flex flex-col justify-center py-24 md:py-32 bg-gray-950">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight">知识分类</h2>
+                    <p class="mt-4 text-lg text-gray-400">从理论基础到前沿实践，构建你的完整知识体系。</p>
+                </div>
+
+                <!-- 分类网格 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 模块 1 -->
+                    <div class="category-card rounded-xl p-8 shadow-xl">
+                        <span class="block text-3xl font-extrabold text-cyan-400 mb-4">01</span>
+                        <h3 class="text-2xl font-semibold text-white mb-3">价值共创基础理论</h3>
+                        <p class="text-gray-400">探索价值共创的核心概念、演化历史与关键成功要素。</p>
+                    </div>
+                    <!-- 模块 2 -->
+                    <div class="category-card rounded-xl p-8 shadow-xl">
+                        <span class="block text-3xl font-extrabold text-cyan-400 mb-4">02</span>
+                        <h3 class="text-2xl font-semibold text-white mb-3">商业模式创新</h3>
+                        <p class="text-gray-400">学习如何设计以共创为核心的新型盈利与增长模式。</p>
+                    </div>
+                    <!-- 模块 3 -->
+                    <div class="category-card rounded-xl p-8 shadow-xl">
+                        <span class="block text-3xl font-extrabold text-cyan-400 mb-4">03</span>
+                        <h3 class="text-2xl font-semibold text-white mb-3">数字平台生态</h3>
+                        <p class="text-gray-400">分析平台如何赋能多边市场，构建繁荣的共创生态系统。</p>
+                    </div>
+                    <!-- 模块 4 -->
+                    <div class="category-card rounded-xl p-8 shadow-xl">
+                        <span class="block text-3xl font-extrabold text-cyan-400 mb-4">04</span>
+                        <h3 class="text-2xl font-semibold text-white mb-3">用户体验设计</h3>
+                        <p class="text-gray-400">深入研究如何通过卓越体验吸引用户参与，驱动持续互动。</p>
+                    </div>
+                    <!-- 模块 5 -->
+                    <div class="category-card rounded-xl p-8 shadow-xl">
+                        <span class="block text-3xl font-extrabold text-cyan-400 mb-4">05</span>
+                        <h3 class="text-2xl font-semibold text-white mb-3">可持续发展</h3>
+                        <p class="text-gray-400">探讨价值共创在社会责任与环境可持续性中的关键作用。</p>
+                    </div>
+                    <!-- 模块 6 -->
+                    <div class="category-card rounded-xl p-8 shadow-xl">
+                        <span class="block text-3xl font-extrabold text-cyan-400 mb-4">06</span>
+                        <h3 class="text-2xl font-semibold text-white mb-3">案例研究</h3>
+                        <p class="text-gray-400">剖析全球领先企业在价值共创领域的真实成功与失败案例。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+            3. 推荐文章
+            【滚动捕捉调整】
+            添加 'min-h-screen' 'flex' 'flex-col' 'justify-center'
+        -->
+        <section id="recommended" class="min-h-screen flex flex-col justify-center py-24 md:py-32 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight">推荐文章</h2>
+                    <p class="mt-4 text-lg text-gray-400">编辑精选，不容错过的深度好文。</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- 推荐文章 1 【链接来自上次修改】 -->
+                    <article class="bg-gray-800 rounded-xl overflow-hidden shadow-lg group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <div class="h-56 w-full overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                                alt="团队协作与策略" 
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                onerror="this.src='https://placehold.co/600x400/0f172a/06b6d4?text=Insights'"
+                            >
+                        </div>
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-cyan-400">外国经济与管理</span>
+                            <h4 class="text-xl font-semibold text-white mt-2 mb-3 leading-snug">
+                                <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd89y6IcBS3Dk_BmZEgXy6lgbU0Vzdzu3sUPnPbr1YnGUMEwO5eiMsykrrYjE40eOGBEh02etW3hM4wDMRptFPPDnBdhUNS5qLpF9y8VAFpMi-NXp4yU6okJoKTA5AetstAFSV5o-yo7WfVNhg7dYh17lrQNL7a8QUCaFYyfbwit5ZQ==&uniplatform=NZKPT&language=CHS" class="hover:text-cyan-300 transition-colors" target="_blank" rel="noopener noreferrer">价值共创：概念内涵与理论演进</a>
+                            </h4>
+                            <p class="text-gray-400 text-sm line-clamp-3">深入探讨价值共创的概念定义、理论起源与发展历程。</p>
+                            <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd89y6IcBS3Dk_BmZEgXy6lgbU0Vzdzu3sUPnPbr1YnGUMEwO5eiMsykrrYjE40eOGBEh02etW3hM4wDMRptFPPDnBdhUNS5qLpF9y8VAFpMi-NXp4yU6okJoKTA5AetstAFSV5o-yo7WfVNhg7dYh17lrQNL7a8QUCaFYyfbwit5ZQ==&uniplatform=NZKPT&language=CHS" class="inline-block mt-4 text-cyan-400 font-medium group-hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+                                阅读更多 &rarr;
+                            </a>
+                        </div>
+                    </article>
+                    <!-- 推荐文章 2 【链接已更新】 -->
+                    <article class="bg-gray-800 rounded-xl overflow-hidden shadow-lg group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <div class="h-56 w-full overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                                alt="平台与生态系统" 
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                onerror="this.src='https://placehold.co/600x400/0f172a/3b82f6?text=Ecosystem'"
+                            >
+                        </div>
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-cyan-400">管理世界</span>
+                            <h4 class="text-xl font-semibold text-white mt-2 mb-3 leading-snug">
+                                <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd8_iwA12IhGgsldXTyso_cER6Luok4LZf-F8n0IsIIv-8bxn-dyyvvgfmIBzc0Bby_AUh10ZR0kqibZ0xkeeCm49xMjvHGgYhIN53IlrZrW1TzKlGrQvOYpYFgKIBqLWAlS4YCeU3aVohTt8TOy90ySSQ9PnP_Q3Ts8RIfAEhCcrsw==&uniplatform=NZKPT&language=CHS" class="hover:text-cyan-300 transition-colors" target="_blank" rel="noopener noreferrer">工业互联网之价值共创模式</a>
+                            </h4>
+                            <p class="text-gray-400 text-sm line-clamp-3">研究工业互联网的价值共创模式构建方法，提出工业互联网的“三联”价值共创模式。</p>
+                            <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd8_iwA12IhGgsldXTyso_cER6Luok4LZf-F8n0IsIIv-8bxn-dyyvvgfmIBzc0Bby_AUh10ZR0kqibZ0xkeeCm49xMjvHGgYhIN53IlrZrW1TzKlGrQvOYpYFgKIBqLWAlS4YCeU3aVohTt8TOy90ySSQ9PnP_Q3Ts8RIfAEhCcrsw==&uniplatform=NZKPT&language=CHS" class="inline-block mt-4 text-cyan-400 font-medium group-hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+                                阅读更多 &rarr;
+                            </a>
+                        </div>
+                    </article>
+                    <!-- 推荐文章 3 【链接已更新】 -->
+                    <article class="bg-gray-800 rounded-xl overflow-hidden shadow-lg group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                        <div class="h-56 w-full overflow-hidden">
+                            <img 
+                                src="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                                alt="用户体验与设计" 
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                onerror="this.src='https://placehold.co/600x400/0f172a/a855f7?text=UX/UI'"
+                            >
+                        </div>
+                        <div class="p-6">
+                            <span class="text-sm font-medium text-cyan-400">研究与发展管理</span>
+                            <h4 class="text-xl font-semibold text-white mt-2 mb-3 leading-snug">
+                                <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd88Qa89X3edcy_50H3bbAKF4BTAlx_VSTyPFRu8ZVEPRuRJjG3WbijwSlAoY0fKuZ1HVrVdZgZbBniR8CvE7AwzzJwBocFqpF3BF6pQ5Zj2LF53jHxF6OEgKBBpMIr55N9__mPuPdaIe0pOrm1regpBWDxdm8TN6xnjXD1haMdnuKA==&uniplatform=NZKPT&language=CHS" class="hover:text-cyan-300 transition-colors" target="_blank" rel="noopener noreferrer">数据赋能研究现状及未来展望</a>
+                            </h4>
+                            <p class="text-gray-400 text-sm line-clamp-3">厘清数据赋能的概念基础，分析研究现状，并展望未来的发展方向。</p>
+                            <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd88Qa89X3edcy_50H3bbAKF4BTAlx_VSTyPFRu8ZVEPRuRJjG3WbijwSlAoY0fKuZ1HVrVdZgZbBniR8CvE7AwzzJwBocFqpF3BF6pQ5Zj2LF53jHxF6OEgKBBpMIr55N9__mPuPdaIe0pOrm1regpBWDxdm8TN6xnjXD1haMdnuKA==&uniplatform=NZKPT&language=CHS" class="inline-block mt-4 text-cyan-400 font-medium group-hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+                                阅读更多 &rarr;
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+            4. 最新动态
+            【滚动捕捉调整】
+            添加 'min-h-screen' 'flex' 'flex-col' 'justify-center'
+        -->
+        <section id="latest" class="min-h-screen flex flex-col justify-center py-24 md:py-32 bg-gray-950">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight">最新文章</h2>
+                    <p class="mt-4 text-lg text-gray-400">紧跟前沿，获取价值共创的最新洞察。</p>
+                </div>
+                
+                <!-- 文章列表 -->
+                <div class="max-w-4xl mx-auto divide-y divide-gray-700">
+                    <!-- 最新文章 1 【链接已更新】 -->
+                    <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd89we9j7NR8MSuUhP5l6up5InhnUGjAfvOBWpFcozv6v8a9StvGxVvSAe60NKONdUPuE6itAD9TrTZf9oKICNkkQBl53W5rE3wRmHnxQLeXcs-b29ULtAnYFW7lWxelDc4LORuChQTTyVols2kq77psAAkWrkCuAbOUJL8JSuq_ELw==&uniplatform=NZKPT&language=CHS" class="block group py-8 px-4 rounded-lg transition-all duration-300 hover:bg-gray-900" target="_blank" rel="noopener noreferrer">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                            <div>
+                                <span class="text-sm font-medium text-cyan-400 mb-1 block">南开管理评论</span>
+                                <h4 class="text-2xl font-semibold text-white transition-colors group-hover:text-cyan-300">
+                                    成为“名配角”？品牌大客户对中小企业成长的赋能机制研究
+                                </h4>
+                                <p class="text-gray-500 text-sm mt-2">发布于 2025年8月15日 &nbsp;&middot;&nbsp; 作者: 邬爱其、赵丽仪</p>
+                            </div>
+                            <div class="text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap md:-translate-x-4 group-hover:translate-x-0">
+                                阅读全文 &rarr;
+                            </div>
+                        </div>
+                    </a>
+                    <!-- 最新文章 2 【链接已更新】 -->
+                    <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd89NpLVtzEm265NR2fd1ThJhNd77YtsOmyi2BuHTzgU_UlxYz7ThmVsTE06UtQh8imZe-JgH0kFvjqkIsvVmZr429D5efBurB6jJjVAKpEAInYfPlZpkoh_QmV6ZRrNNGFRBsnIDWE8jRCM3HzqSyZKtfEDY_F5-y0VQm5Kw4-yCUw==&uniplatform=NZKPT&language=CHS" class="block group py-8 px-4 rounded-lg transition-all duration-300 hover:bg-gray-900" target="_blank" rel="noopener noreferrer">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                            <div>
+                                <span class="text-sm font-medium text-cyan-400 mb-1 block">中国工业经济</span>
+                                <h4 class="text-2xl font-semibold text-white transition-colors group-hover:text-cyan-300">
+                                    创新生态系统中企业的价值共创共享与新兴产业竞争优势形成——以中国光伏产业发展为例
+                                </h4>
+                                <p class="text-gray-500 text-sm mt-2">发布于 2025年6月24日 &nbsp;&middot;&nbsp; 作者: 柳卸林、葛爽</p>
+                            </div>
+                            <div class="text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap md:-translate-x-4 group-hover:translate-x-0">
+                                阅读全文 &rarr;
+                            </div>
+                        </div>
+                    </a>
+                    <!-- 最新文章 3 【链接已更新】 -->
+                    <a href="https://kns.cnki.net/kcms2/article/abstract?v=sTAINAsmd88GZDQ4YvbIJxQ9VJIoRZwyxyq-G1X3RC3V8awjuDFSxNvhUx_UsINVG4r6m1Xlp1YxZ1tDlShGcKejMjVMn3hpJp8molnUp4g_Pf3LXsRIZ0G42S0yVGMw4DCoGbQNVVdvOxJlvq9N0GxEpLwEigSoFF4w50fFW-3umv6oZNczkA==&uniplatform=NZKPT&language=CHS" class="block group py-8 px-4 rounded-lg transition-all duration-300 hover:bg-gray-900" target="_blank" rel="noopener noreferrer">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                            <div>
+                                <span class="text-sm font-medium text-cyan-400 mb-1 block">管理世界</span>
+                                <h4 class="text-2xl font-semibold text-white transition-colors group-hover:text-cyan-300">
+                                    工业互联网平台与“双重身份”用户企业价值共创的协同演化机理研究
+                                </h4>
+                                <p class="text-gray-500 text-sm mt-2">发布于 2025年6月20日 &nbsp;&middot;&nbsp; 作者: 李雪灵等</p>
+
+                            </div>
+                            <div class="text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap md:-translate-x-4 group-hover:translate-x-0">
+                                阅读全文 &rarr;
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="text-center mt-16">
+                    <a href="#" class="bg-gray-800 text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-700 transition-all">
+                        查看所有文章
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+            5. 最后一页 (Call to Action)
+            【修改】合并了页脚，并调整了布局
+            【布局调整 Q4】将 'justify-between' 改为 'justify-around'，使订阅部分更居中
+        -->
+        <section id="contact" class="min-h-screen flex flex-col justify-around items-center py-24 md:py-32 hero-gradient-bg">
+            
+            <!-- CTA 内容 -->
+            <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+                <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+                    成为价值共创的先行者
+                </h2>
+                <p class="mt-6 text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
+                    订阅我们的独家周报，第一时间获取最新的行业洞察、深度案例分析和即将举办的线上研讨会信息。
+                </p>
+                <form class="mt-12 max-w-lg mx-auto">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <input 
+                            type="email" 
+                            placeholder="输入您的电子邮箱" 
+                            required
+                            class="flex-1 px-6 py-4 rounded-full bg-gray-900/50 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
+                        >
+                        <button 
+                            type="submit"
+                            class="bg-white text-gray-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-200 transition-transform hover:scale-105"
+                        >
+                            立即订阅
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 【新】页脚内容已合并到此页 -->
+            <div class="w-full max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8 border-t border-gray-600/30 pt-8 text-gray-300">
+                    <div>
+                        <a href="#" class="text-3xl font-bold tracking-wider">
+                            VCP<span class="text-cyan-400">.</span>
+                        </a>
+                        <p class="text-gray-400 mt-2">东北大学工商管理学院孙新波教授团队 &copy; 2025. 保留所有权利。</p>
+                    </div>
+                    <div class="flex space-x-6 text-gray-400">
+                        <!-- 【修改 Q2】添加 id="openAboutModal" -->
+                        <a href="#" id="openAboutModal" class="hover:text-cyan-400 transition-colors">关于我们</a>
+                        <!-- 【修改 Q1】ID 'openPrivacyModal' 已存在 -->
+                        <a href="#" id="openPrivacyModal" class="hover:text-cyan-400 transition-colors">隐私政策</a>
+                        <!-- 【修改 Q3】添加 id="openContactModal" -->
+                        <a href="#" id="openContactModal" class="hover:text-cyan-400 transition-colors">联系合作</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- 
+        【修改】
+        原页脚已被删除，因为它已合并到上面的 "contact" 部分
+    -->
+
+    <!-- 【修改 Q1】隐私政策模态框 (Modal) -->
+    <!-- 添加 'opacity-0' 和 'transition-opacity' 以实现渐变动画 -->
+    <div id="privacyModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 ease-out">
+        <!-- 1. 背景蒙版, 添加 'modal-backdrop' class -->
+        <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm modal-backdrop"></div>
+        
+        <!-- 2. 模态框内容 (白色背景) -->
+        <div class="relative w-full max-w-4xl bg-white text-gray-800 rounded-2xl shadow-2xl flex flex-col" style="max-height: 90vh;">
+            
+            <!-- 3. 头部 (Title & Close Button) -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-bold">《个人信息及隐私保护政策》</h2>
+                <!-- 添加 'modal-close' class -->
+                <button class="text-gray-400 hover:text-gray-800 p-1 modal-close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- 4. 内容 (Scrollable) -->
+            <!-- 【修改 Q1】重命名为 'modal-content' 并添加排版class -->
+            <div class="p-8 overflow-y-auto space-y-0 modal-content">
+                <p>东北大学孙新波教授团队非常尊重用户个人信息及隐私的保护，我们始终遵守中国、欧盟及其他相关国家/地区制定发布的有关个人信息和数据保护方面的法律法规（包括《中华人民共和国个人信息保护法》、《中华人民共和国数据安全法》、《欧盟通用数据保护条例》等）。在您使用我们提供的产品和服务时，我们将按照本《个人信息及隐私保护政策（以下称“本政策”）规定的标准和措施来保护您的个人信息及隐私。本政策包含了我们收集、存储、使用、共享和保护您的个人信息的条款，我们希望通过本政策向您清晰地介绍我们对您个人信息的处理方式，因此我们建议您完整地阅读本政策，以帮助您了解维护自己隐私权的方式。在您使用我们的产品和/或服务前，请务必仔细阅读并了解本政策。如您对本政策有任何疑问，您可以通过本政策公布的联系方式与我们联系。若您使用我们的产品或服务，即表示您已充分理解并同意我们在本政策中所述的内容。如您不同意本政策的全部或其中部分条款，请您立即停止使用我们的产品或服务。当我们更新本政策后，如您继续使用我们的产品或服务，则表示您已充分理解并同意本政策的更新内容。</p>
+                
+                <h3>一、适用范围</h3>
+                <p>为用户提供更好、更优、更个性化的产品和服务是我们坚持不懈的追求，也希望通过我们提供的产品和服务可以更方便您的日常运营，本政策适用于我们提供的所有产品和服务。本政策也适用于我们所有的、参与或者组织的设立或暂未设立独立隐私政策的网站、网络销售平台、应用程序（App）、远程服务平台、电话、电子邮件、线下活动等渠道所提供的全部产品和服务。需要特别说明的是，本政策不适用于其他第三方向您提供的产品或服务。</p>
+                
+                <h3>二、我们可能会收集的个人信息</h3>
+                <p>我们仅会在本政策所述的目的之下，通过各种合法渠道收集您如下类型的个人信息（但不包括匿名化处理后的信息）。其中，我们所收集的部分个人信息可能属于敏感个人信息。我们只有在具备特定的目的和充分的必要性，并采取严格保护措施的情形下，方会处理您的敏感个人信息。在处理您的敏感个人信息时，我们会取得您的单独同意。</p>
+                <ol>
+                    <li>公司名称、公司信息、联系人、公司证照、电话号码、电子邮箱、地址；</li>
+                    <li>设备信息及相关附加信息；</li>
+                    <li>姓名、性别、年龄或其他身份证明；</li>
+                    <li>个人健康生理信息（包括医学影像信息、医学检验报告等）；</li>
+                    <li>在我们的网站或应用平台上建立账户时可能选择的用户名和密码；</li>
+                    <li>在您参加或参与的我们主办的活动或行动中收集的信息；</li>
+                    <li>为向您提供相关服务所必需的其他个人信息。</li>
+                </ol>
+
+                <h3>三、我们收集、使用个人信息的目的</h3>
+                <p>我们将仅出于以下目的收集和使用您的个人信息。当我们要将您的个人信息用于实现本政策未载明的其他目的时，或将基于特定目的收集而来的信息用于其他目的时，我们会根据适用法律的要求，事先征求您的同意。</p>
+                <ol>
+                    <li>为您购买、使用我们的产品或服务而提供服务和支持，包括但不限于提供安装调试服务、客户售后服务、远程服务支持等；</li>
+                    <li>向您推广我们的产品或服务；</li>
+                    <li>与您联系、进行业务联络；</li>
+                    <li>编制统计资料、开展内部审计、进行数据分析和研究，改进产品和服务；</li>
+                    <li>开展学术培训、学术研究、临床实验等活动；</li>
+                    <li>验证您的身份；</li>
+                    <li>维护我们的在线服务；</li>
+                    <li>更好地了解使用我们服务的客户的利益；</li>
+                    <li>为您提供安全保障；</li>
+                    <li>遵守我们的法律和监管义务等。</li>
+                </ol>
+
+                <h3>四、我们如何收集信息</h3>
+                <p>1.我们收集信息是为了向您提供更好、更优、更个性化的产品和服务，我们收集信息的方式如下：</p>
+                <ol>
+                    <li>您向我们提供的信息；</li>
+                    <li>允许我们从您或其他来源收集的信息；</li>
+                    <li>自动从您用于连接东软医疗服务的设备中获取的信息；</li>
+                    <li>在您使用产品或服务过程中收集的信息；</li>
+                    <li>您参与问卷调查时向我们发送的问卷答复信息；</li>
+                    <li>您与我们的关联方、合作伙伴之间互动时我们收集的相关信息。</li>
+                </ol>
+                <p>2.除上述情形外，我们将根据本政策约定，在适用法律允许的范围内，遵循合法、正当、必要的原则，仅在实现本政策规定的目的的必要范围内收集、使用您的个人信息。</p>
+                <p>3. 我们会尽可能地避免收集和处理与业务无关的个人信息。我们不会主动收集任何您或来自您渠道方面的任何自然人的个人信息。如您提供的信息中含有自然人的个人信息，您需确保您已经取得合法的授权。</p>
+                <p>4.您在使用我们的产品或服务时所提供的所有个人信息，除非您要求删除或限制、拒绝我们收集，否则将在您使用我们的产品或服务期间持续授权我们使用。</p>
+                <p>5.请您知悉并理解，若您拒绝提供使用产品或服务所必要的信息，您将无法使用该产品或服务，但这不影响您使用其他产品或服务。</p>
+                <p>6.我们可能从第三方获取您授权共享的个人信息。我们会将依据与该第三方的约定，确认个人信息来源的合法性后，在符合相关法律和法规规定的前提下，使用经您授权同意该第三方向我们提供的您的个人信息。</p>
+                <p>7.在没有得到您的同意前，我们不会收集和使用您的个人信息，但以下情形除外：</p>
+                <ol>
+                    <li>为订立、履行您作为一方当事人的合同所必需；</li>
+                    <li>为履行法定职责或者法定义务所必需；</li>
+                    <li>为应对突发公共卫生事件，或者紧急情况下为保护自然人的生命健康和财产安全所必需；</li>
+                    <li>为公共利益实施新闻报道、舆论监督等行为，在合理的范围内处理个人信息；</li>
+                    <li>依照规定在合理的范围内处理您自行公开或者其他已经合法公开的个人信息；</li>
+                    <li>法律、行政法规规定的其他情形。</li>
+                </ol>
+
+                <h3>五、我们如何共享、转移、公开披露您的个人信息</h3>
+                <p>1.共享 除以下所述或收集信息之时说明的情形之外，未事先获得您的明确同意或授权，我们不会对外共享您的个人信息。</p>
+                <ol>
+                    <li>法定情形下的共享：我们可能会根据法律法规的规定或行政或司法机构的要求，对外共享您的个人信息；</li>
+                    <li>向东软医疗的关联方分享您的个人信息：我们只会出于合法、正当、必要、特定、明确的目的，按照本政策共享必要的个人信息；</li>
+                    <li>与服务供应商或合作伙伴共享：为实现外部处理的目的和向您提供产品或服务，我们可能会与我们的服务提供商或合作伙伴分享您的个人信息。但我们仅会出于合法、正当、必要、特定、明确的目的，按照本政策共享提供产品或服务所必要的您的个人信息。我们的服务供应商或合作伙伴无权将我们共享的个人信息用于任何其他目的。在上述第(2)(3)项的情形下，我们将征求您的单独同意。对于我们与之共享个人信息的公司、组织和个人，我们会与其签署严格的保密协议，并要求其按照本政策以及其他任何相关的保密和安全措施来处理个人信息。</li>
+                </ol>
+                <p>2.转移 我们不会将您的个人信息转移给任何公司、组织和个人，但以下情况除外：</p>
+                <ol>
+                    <li>事先获得您的明确同意或授权；</li>
+                    <li>在涉及合并、分立、解散、被宣告破产时，如需转移个人信息，我们将会在向您告知新持有您的个人信息的公司、组织或个人的名称或者姓名和联系方式的同时，要求新的持有您个人信息的公司、组织或个人继续受本政策的约束。</li>
+                </ol>
+                <p>3.公开披露我们仅会在以下情况下，公开披露您的个人信息。我们会向您告知此次公开披露的目的、披露信息的类型及可能涉及的敏感个人信息，并遵从相关法律法规的要求进行披露：</p>
+                <ol>
+                    <li>获得您明确的单独同意之后；</li>
+                    <li>根据法律法规的规定，或按政府主管部门的强制性要求。</li>
+                </ol>
+                <p>4.以下情形中，我们共享、转移、公开披露您的个人信息无需事先征得您的授权同意：</p>
+                <ol>
+                    <li>为订立、履行您作为一方当事人的合同所必需；</li>
+                    <li>为履行法定职责或者法定义务所必需；</li>
+                    <li>为应对突发公共卫生事件，或者紧急情况下为保护自然人的生命健康和财产安全所必需；</li>
+                    <li>为公共利益实施新闻报道、舆论监督等行为，在合理的范围内处理个人信息；</li>
+                    <li>依照规定在合理的范围内处理您自行公开或者其他已经合法公开的个人信息；</li>
+                    <li>法律、行政法规规定的其他情形。</li>
+                </ol>
+                <p>另外，根据法律法规、国家标准规定，共享、转移经匿名化处理的个人信息，且确保数据接收方无法复原并重新识别个人信息主体的，不属于个人信息的对外共享、转移及公开披露行为。</p>
+                
+                <h3>六、信息存储</h3>
+                <p>我们将在提供产品或服务期间，合法持续保存所收集到的您的个人信息。我们将根据个人信息的类型差异而适当进行保存期限安排，当您的个人信息超出我们所保存的期限后，除法律、行政法规对于特定信息保留期限另有规定外，我们将会删除您的个人信息或对您的个人信息做匿名化处理。</p>
+                
+                <h3>七、您的个人信息保护</h3>
+                <p>为保障您的个人信息安全，我们努力采取各种合理的物理、电子和管理方面的安全措施来保护您的信息，保障您的信息不受未经授权的访问、公开披露、使用、篡改、损坏或丢失。我们对可能接触到您的信息的员工也采取了严格管理，包括但不限于根据岗位的不同采取不同的权限控制，与他们签署保密协议，监控他们的操作情况等措施。 尽管有前述安全措施以及遵守相关法律规定要求的标准，但同时也请您理解，由于技术的限制以及可能存在的各种恶意手段，可能会出现您的个人信息安全受到威胁并面临丢失、被盗用、被篡改或被未经授权的第三方使用的情况。 如出现个人信息安全不良事件情况，我们将按照法律、行政法规等的要求及时向您告知和采取必要相应措施。如您发现自己的个人信息泄密，请您立即通过本政策的联系方式联络我们，以便我们采取必要相应措施。</p>
+                
+                <h3>八、关于Cookie</h3>
+                <p>当您访问我们的网站时，我们可能会以“Cookie”的形式将某些信息存入您的计算机，“Cookie”是网页服务器放置在您的计算机上的一个小的文本文件，“Cookie”不能用于运行程序，使用“Cookie”的目的是为您提供一项节省时间的简便功能，但并不表示我们可自动获悉有关您的任何个人信息。您可以选择接受或拒绝“Cookie”。</p>
+                
+                <h3>九、您可以行使的权利</h3>
+                <p>1.在适用法律规定的范围内，您有权对自己的个人信息行使以下权利：</p>
+                <ol>
+                    <li>查阅、复制您的个人信息；</li>
+                    <li>限制或拒绝我们处理您的个人信息；</li>
+                    <li>随时改变您授权同意处理您的个人信息的范围，或者撤回您的授权同意（您撤回同意或授权的决定，不会影响此前基于您的授权而开展的个人信息处理）；</li>
+                    <li>在您发现我们处理的您的个人信息不准确或不完整时，要求更正、补充您的个人信息；</li>
+                    <li>在以下情形中，请求删除您的个人信息（若我们决定响应您的删除请求，我们会根据适用法律法规的要求删除您的个人信息或进行匿名化处理。法律、行政法规规定的保存期限未届满，或者删除您的个人信息从技术上难以实现的，我们将停止除存储和采取必要的安全保护措施之外的处理）；
+                        <ol class="list-decimal list-inside space-y-1 pl-8">
+                            <li>个人信息处理目的已经实现、无法实现或者该信息为实现处理目的不再必要；</li>
+                            <li>您不再使用我们的服务；</li>
+                            <li>我们停止提供服务，或者个人信息保存期限届满；</li>
+                            <li>您撤回有关处理您的个人信息的同意；</li>
+                            <li>我们收集、使用您的个人信息，却未征得您的同意；</li>
+                            <li>我们违反法律、行政法规或者违反与您的约定处理您的个人信息；</li>
+                            <li>法律、行政法规规定的其他情形。</li>
+                        </ol>
+                    </li>
+                    <li>要求我们对您的个人信息处理规则进行解释说明。</li>
+                </ol>
+                <p>2.您可以通过本政策的联络方式，与我们取得联系，并提出您的请求。</p>
+                <p>3.在以下情形中，按照法律法规的要求，我们将无法响应您的请求：</p>
+                <ol>
+                    <li>与我们履行法律法规规定的义务相关的；</li>
+                    <li>与国家安全、国防安全直接相关的；</li>
+                    <li>与公共安全、公共卫生、重大公共利益直接相关的；</li>
+                    <li>与刑事侦查、起诉、审判和执行判决等有关的；</li>
+                    <li>有充分证据表明您存在主观恶意或滥用权利的；</li>
+                    <li>出于维护您或其他个人的生命、财产等重大合法权益但又很难得到本人同意的；</li>
+                    <li>响应您的请求将导致您或其他个人、组织的合法权益受到严重损害的；</li>
+                    <li>涉及商业秘密的；</li>
+                    <li>法律法规规定的其他情形。</li>
+                </ol>
+
+                <h3>十、未成年人保护</h3>
+                <p>1.我们不会有意收集未成年人的个人信息，若您提供未成年人的个人信息，请您预先经过其监护人同意后再进行，“未成年人”的定义应根据本政策适用的法律确定。</p>
+                <p>2.我们非常重视未成年人个人信息的保护。对于经父母或其他监护人同意而收集未成年人信息的情况，我们只会在受到法律允许、父母或其他监护人明确同意或者保护未成年人所必要的情况下处理该未成年人信息。</p>
+                
+                <h3>十一、本政策的修改</h3>
+                <p>本政策的修改权和解释权属于东北大学孙新波教授团队。我们会随时更新本政策并予以公布，更新的内容自公布之日起生效，请您定期访问，以便及时了解。</p>
+                
+                <h3>十二、法律适用</h3>
+                <p>本政策受中华人民共和国法律管辖，因此发生争议的，由双方协商解决。如协商不成时，您同意由我们法定地址所在地的人民法院作出裁决。</p>
+                
+                <h3>十三、投诉机构</h3>
+                <p>如果您不满意我们的隐私政策符合您的关注和期待的方式或内容，您可以向法定管理机构投诉。</p>
+                
+                <h3>十四、联系方式</h3>
+                <p>我们设立了【个人信息保护负责人】，如果您对本政策或您个人信息的相关事宜有任何疑问、建议或意见，请通过以下方式与我们联系。</p>
+                <p>联系邮箱：zhibozu@outlook.com</p>
+                <p>联系地址：中国沈阳市浑南区创新路195号</p>
+                <p class="font-semibold mt-4">生效日期：2026年1月</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 【新 Q2】关于我们 模态框 -->
+    <div id="aboutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 ease-out">
+        <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm modal-backdrop"></div>
+        <div class="relative w-full max-w-4xl bg-white text-gray-800 rounded-2xl shadow-2xl flex flex-col" style="max-height: 90vh;">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-bold">关于我们</h2>
+                <button class="text-gray-400 hover:text-gray-800 p-1 modal-close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-8 overflow-y-auto modal-content">
+                <h3>孙新波 教授</h3>
+                <p>
+                    管理学博士，东北大学长聘教授、博士生导师，现任东北大学东北振兴研究中心副主任，曾任工商管理学院副院长。主要研究方向为组织与战略数字化转型、数智生态价值共创、AI与企业管理模式变革及管理哲学，原创性提出“反管理”原理、“人性素”假设等理论。主持国家社科基金重大项目“机器人的广泛使用与企业管理模式变革研究”及国家自然科学基金重点项目“数智生态系统下的企业价值共创理论与方法研究”。与海尔集团、海信集团等企业建立产学研合作，主持横向课题10余项，为百余家企业提供高管培训。主讲《管理哲学》《企业数字化实践》等课程，其编撰的《管理哲学》获中国商业经济学会优秀教材特等奖。在《管理世界》《南开管理评论》等期刊发表论文220余篇，多项资政建议获省级领导批示。入选中国管理案例研究40年高产学者，获“全国百篇优秀管理案例”重点项目立项。
+                </p>
+                <h3>团队成员</h3>
+                <ul>
+                    <li>李俊悦</li>
+                    <li>高宇锋</li>
+                    <li>刘剑桥</li>
+                    <li>朱晓林</li>
+                    <li>王本正</li>
+                    <li>祖智博</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 【新 Q3】联系合作 模态框 -->
+    <div id="contactModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300 ease-out">
+        <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm modal-backdrop"></div>
+        <div class="relative w-full max-w-lg bg-white text-gray-800 rounded-2xl shadow-2xl flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-bold">联系合作</h2>
+                <button class="text-gray-400 hover:text-gray-800 p-1 modal-close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-8 modal-content">
+                <p>
+                    如有合作需要，请联系：
+                    <a href="mailto:zhibozu@outlook.com">zhibozu@outlook.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 【修改 Q1】用于模态框交互的JavaScript (重构以支持多个模态框和渐变) -->
+    <script>
+        // 通用模态框处理逻辑
+        const setupModal = (triggerId, modalId) => {
+            const openBtn = document.getElementById(triggerId);
+            const modal = document.getElementById(modalId);
+            
+            if (!openBtn || !modal) {
+                // console.warn(`Modal trigger or content not found for: ${triggerId}, ${modalId}`);
+                return;
+            }
+
+            const closeBtn = modal.querySelector('.modal-close');
+            const backdrop = modal.querySelector('.modal-backdrop');
+
+            const openModal = () => {
+                modal.classList.remove('hidden');
+                // 强制浏览器重绘，确保 'hidden' 移除先生效，再开始 'opacity' 过渡
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-0');
+                });
+                document.body.classList.add('overflow-hidden');
+            };
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0');
+                // 等待 300ms 动画结束后再添加 'hidden'
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    // 仅在所有模态框都关闭时才恢复滚动
+                    if (document.querySelectorAll('.fixed.inset-0:not(.hidden)').length === 0) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                }, 300); // 必须匹配 CSS duration-300
+            };
+
+            openBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // 阻止 <a> 标签的默认跳转行为
+                openModal();
+            });
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeModal);
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', closeModal); // 点击蒙版关闭
+            }
+        };
+
+        // DOM 加载完毕后，初始化所有的模态框
+        document.addEventListener('DOMContentLoaded', () => {
+            setupModal('openPrivacyModal', 'privacyModal');
+            setupModal('openAboutModal', 'aboutModal');
+            setupModal('openContactModal', 'contactModal');
+        });
+    </script>
+
+</body>
+</html>
